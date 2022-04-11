@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/dotenx/goth"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/markbates/goth"
 	"golang.org/x/oauth2"
 )
 

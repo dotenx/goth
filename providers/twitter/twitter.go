@@ -11,7 +11,7 @@ import (
 
 	"fmt"
 
-	"github.com/markbates/goth"
+	"github.com/dotenx/goth"
 	"github.com/mrjones/oauth"
 	"golang.org/x/oauth2"
 )

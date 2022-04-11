@@ -8,8 +8,8 @@ import (
 	"os"
 	"testing"
 
+	"github.com/dotenx/goth"
 	"github.com/gorilla/pat"
-	"github.com/markbates/goth"
 	"github.com/mrjones/oauth"
 	"github.com/stretchr/testify/assert"
 )

@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/markbates/goth"
+	"github.com/dotenx/goth"
 )
 
 // Session stores data during the auth process with TikTok
