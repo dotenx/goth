@@ -1,11 +1,12 @@
 package cloudfoundry_test
 
 import (
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/providers/cloudfoundry"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
+
+	"github.com/dotenx/goth"
+	"github.com/dotenx/goth/providers/cloudfoundry"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_New(t *testing.T) {

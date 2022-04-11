@@ -9,15 +9,16 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 
 	"fmt"
 
-	"github.com/markbates/goth"
+	"github.com/dotenx/goth"
 	"golang.org/x/oauth2"
 )
 
 const (
-	authURL    = "https://www.dropbox.com/oauth2/authorize"
+	authURL    = "https://www.dropbox.com/oauth2/authorize?token_access_type=offline"
 	tokenURL   = "https://api.dropbox.com/oauth2/token"
 	accountURL = "https://api.dropbox.com/2/users/get_current_account"
 )
@@ -35,8 +36,10 @@ type Provider struct {
 
 // Session stores data during the auth process with Dropbox.
 type Session struct {
-	AuthURL string
-	Token   string
+	AuthURL      string
+	Token        string
+	RefreshToken string
+	ExpiresAt    time.Time
 }
 
 // New creates a new Dropbox provider and sets up important connection details.
@@ -82,8 +85,10 @@ func (p *Provider) BeginAuth(state string) (goth.Session, error) {
 func (p *Provider) FetchUser(session goth.Session) (goth.User, error) {
 	s := session.(*Session)
 	user := goth.User{
-		AccessToken: s.Token,
-		Provider:    p.Name(),
+		AccessToken:  s.Token,
+		Provider:     p.Name(),
+		RefreshToken: s.RefreshToken,
+		ExpiresAt:    s.ExpiresAt,
 	}
 
 	if user.AccessToken == "" {
@@ -148,6 +153,8 @@ func (s *Session) Authorize(provider goth.Provider, params goth.Params) (string,
 	}
 
 	s.Token = token.AccessToken
+	s.RefreshToken = token.RefreshToken
+	s.ExpiresAt = token.Expiry
 	return token.AccessToken, nil
 }
 
@@ -202,12 +209,18 @@ func userFromReader(r io.Reader, user *goth.User) error {
 	return nil
 }
 
-//RefreshToken refresh token is not provided by dropbox
-func (p *Provider) RefreshToken(refreshToken string) (*oauth2.Token, error) {
-	return nil, errors.New("Refresh token is not provided by dropbox")
-}
-
 //RefreshTokenAvailable refresh token is not provided by dropbox
 func (p *Provider) RefreshTokenAvailable() bool {
-	return false
+	return true
+}
+
+//RefreshToken get new access token based on the refresh token
+func (p *Provider) RefreshToken(refreshToken string) (*oauth2.Token, error) {
+	token := &oauth2.Token{RefreshToken: refreshToken}
+	ts := p.config.TokenSource(oauth2.NoContext, token)
+	newToken, err := ts.Token()
+	if err != nil {
+		return nil, err
+	}
+	return newToken, err
 }

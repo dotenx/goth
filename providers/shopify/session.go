@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/markbates/goth"
+	"github.com/dotenx/goth"
 )
 
 const (

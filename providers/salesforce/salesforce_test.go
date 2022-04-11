@@ -1,11 +1,12 @@
 package salesforce_test
 
 import (
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/providers/salesforce"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
+
+	"github.com/dotenx/goth"
+	"github.com/dotenx/goth/providers/salesforce"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_New(t *testing.T) {
