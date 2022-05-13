@@ -30,6 +30,7 @@ func New(clientKey, secret, callbackURL string, scopes ...string) *Provider {
 		// See https://developers.google.com/identity/protocols/oauth2/openid-connect#access-type-param
 		authCodeOptions: []oauth2.AuthCodeOption{
 			oauth2.AccessTypeOffline,
+			oauth2.ApprovalForce,
 		},
 	}
 	p.config = newConfig(p, scopes)
